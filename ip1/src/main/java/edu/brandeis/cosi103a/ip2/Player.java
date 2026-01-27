@@ -32,6 +32,18 @@ public class Player {
         return name;
     }
 
+    public Stack<Card> getDeck() {
+        return deck;
+    }
+
+    public ArrayList<Card> getHand() {
+        return hand;
+    }
+
+    public Stack<Card> getDiscards() {
+        return discards;
+    }
+
     public void playTurn() {
         System.out.println(name + "'s turn:");
         int totalValue = 0;
