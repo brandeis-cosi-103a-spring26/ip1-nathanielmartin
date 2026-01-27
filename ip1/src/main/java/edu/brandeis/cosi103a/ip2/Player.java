@@ -9,9 +9,11 @@ public class Player {
     private Stack<Card> discards;
     private ArrayList<Card> hand;
     private AutomationGame game;
+    private String name;
 
-    public Player(AutomationGame game) {
+    public Player(AutomationGame game, String name) {
         this.game = game;
+        this.name = name;
         deck = new Stack<>();
         // Set up starting deck containing 7 Bitcoins and 3 Methods
         for (int i = 0; i < 7; i++) {
@@ -20,19 +22,28 @@ public class Player {
         for (int i = 0; i < 3; i++) {
             deck.push(new Card(2, 1, false, "Method"));
         }
-        shuffle();
-        draw();
         discards = new Stack<>();
         hand = new ArrayList<>();
+        shuffle();
+        draw();
+    }
+
+    public String getName() {
+        return name;
     }
 
     public void playTurn() {
+        System.out.println(name + "'s turn:");
         int totalValue = 0;
+        System.out.println("  Hand:");
+        // Show hand and calculate total currency value
         for (Card card : hand) {
+            System.out.println("    " + card.getName());
             if (card.isCurrency()) {
                 totalValue += card.getValue();
             }
         }
+        System.out.println("  Total currency value: " + totalValue);
         buy(totalValue);
         discards.addAll(hand);
         hand.clear();
@@ -63,6 +74,7 @@ public class Player {
         }
         if (card != null) {
             discards.push(card);
+            System.out.println("  Bought: " + card.getName());
         }
     }
 
@@ -82,11 +94,28 @@ public class Player {
     }
 
     public void shuffle() {
+        System.out.println(name + " is shuffling their deck.");
         ArrayList<Card> tempList = new ArrayList<>(deck);
         Collections.shuffle(tempList);
         deck.clear();
         for (Card card : tempList) {
             deck.push(card);
         }
+    }
+
+    public int getFinalScore() {
+        int score = 0;
+        // Combine all cards to calculate score
+        Stack<Card> allCards = new Stack<>();
+        allCards.addAll(deck);
+        allCards.addAll(discards);
+        allCards.addAll(hand);
+        // Calculate score from non-currency cards
+        for (Card card : allCards) {
+            if (!card.isCurrency()) {
+                score += card.getValue();
+            }
+        }
+        return score;
     }
 }

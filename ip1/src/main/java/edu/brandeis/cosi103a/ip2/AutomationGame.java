@@ -25,11 +25,23 @@ public class AutomationGame {
     }
 
     public Card buyCard(String name) {
+        // Find and remove the named card from the supply
         for (int i = 0; i < supply.size(); i++) {
             if (supply.get(i).getName().equals(name)) {
                 return supply.remove(i);
             }
         }
+        // If the card is not found, return null
         return null;
+    }
+
+    public boolean checkGameEnd() {
+        // Check if the game has ended by seeing if "Framework" cards are depleted
+        for (Card card : supply) {
+            if (card.getName().equals("Framework")) {
+                return false;
+            }
+        }
+        return true;
     }
 }
